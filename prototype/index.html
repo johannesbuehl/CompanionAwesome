@@ -187,7 +187,7 @@
                 displayElement.classList.add(`${isBrand(entry) ? 'fab' : 'fas'}`);
                 displayElement.classList.add(`fa-${entry.id}`);
                 displayElement.title = `${entry.id} (${entry.unicode})`;
-                displayElement.onclick = () => { updateSymbol(`${entry.unicode}`, isBrand(entry)); generate() };
+                displayElement.onclick = () => { updateSymbol(`${entry.unicode}`, isBrand(entry)); generate_slider() };
                 document.querySelector("#searchResults").appendChild(displayElement);
             }
         }
