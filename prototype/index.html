@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stream Awesome - The Stream Deck Icon Generator using Font Awesome</title>
+    <title>Companion Awesome - The Companion Icon Generator using Font Awesome</title>
     <link rel="stylesheet" href="fontawesome/css/all.css">
     <!-- Pro stylesheets loaded in addStylesheets() -->
     <link rel="stylesheet" href="style.css">
@@ -14,14 +14,14 @@
 <body>
 
     <!-- This is required so the browser actually loads the font, lol -->
-    <div id="greeting">Stream Awesome Prototype
+    <div id="greeting">Companion Awesome Prototype
         <!-- Loaded in addIcons() -->
     </div>
 
 
     <div id="mainPage">
         <section id="content">
-            <canvas id="main" width=256 height=256>
+            <canvas id="main" width=72 height=58>
             </canvas>
         </section>
 
@@ -39,14 +39,17 @@
 
         <section id="controls">
             <div>
-                <label for="hue">Hue </label>
-                <input type="range" id="hue" max=360 min=0 value=216 oninput="generate()">
+				<label for="hue_number">Hue </label>
+				<div id="hue">
+					<input type="range" id="hue_slider" max=360 min=0 value=216 oninput="generate_slider()">
+					<input type="number" id="hue_number" max="360" min="0" value="216" oninput="generate_number()">
+				</div>
                 
                 <label for="inversed">Invert colors</label>
-                <input type="checkbox" id="inversed" oninput="generate()">
+                <input type="checkbox" id="inversed" oninput="generate_slider()">
 
                 <label for="harmonyRule">Select a harmony rule</label>
-                <select id="harmonyRule" name="harmonyRule" oninput="generate()">
+                <select id="harmonyRule" name="harmonyRule" oninput="generate_slider()">
                     <option value="Monochromatic">Monochromatic</option>
                     <option value="Complementary">Complementary</option>
                     <!-- Other options loaded later -->
@@ -57,7 +60,7 @@
 
             <div>
                 <label for="styleSelect">Select a style</label>
-                <select id="styleSelect" name="styleSelect" oninput="generate()">
+                <select id="styleSelect" name="styleSelect" oninput="generate_slider()">
                     <option value="Solid">Solid</option>
                     <!-- Other options loaded later -->
                 </select>
@@ -80,7 +83,7 @@
                 </dl>
             </div>
 
-            <!--<button id="generate" onclick="generate()">Generate!</button>-->
+            <button id="generate" onclick="generate_slider()">Generate!</button>
             <button id="saveImage" onclick="download()">Download!</button>
         </section>
     </div>
@@ -92,7 +95,7 @@
 
         class ColorWay {
             constructor() {
-                const hue = document.getElementById("hue").value;
+                const hue = document.getElementById("hue_slider").value;
                 this.hue = parseInt(hue);
 
                 // Setting up color variables
@@ -112,8 +115,7 @@
             }
 
             updateColorWay() {
-
-                const hue = document.getElementById("hue").value;
+                const hue = document.getElementById("hue_slider").value;
                 
                 this.hue = parseInt(hue);
 
@@ -221,12 +223,14 @@
             let canvas = document.getElementById("main");
             const image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
             let link = document.createElement('a');
-            link.download = `stream-awesome-icon-${Math.round(Math.random() * 100000)}.png`;
+            link.download = `companion-awesome-icon-${Math.round(Math.random() * 100000)}.png`;
             link.href = image;
             link.click();
         }
 
         function doThings(icon, hue, isBrand, iconStyle) {
+			const fontSize = 40.78;
+
             const canvas = document.getElementById("main");
             const ctx = canvas.getContext('2d');
 
@@ -262,22 +266,36 @@
 
             ctx.textBaseline = 'middle';
             ctx.textAlign = "center";
-            ctx.font = `${fontWeight} 180px "Font Awesome ${versionNumber} ${fontType}"`;
+            ctx.font = `${fontWeight} ${fontSize} "Font Awesome ${versionNumber} ${fontType}"`;
 
+			
             const textMetrics = ctx.measureText(icon);
-            const realFontSize = Math.min(180, 180 * ((180 + 5) / textMetrics.width));
+            const realFontSize = Math.min(fontSize, fontSize * ((fontSize + 5) / textMetrics.width));
             ctx.font = `${fontWeight} ${realFontSize}px "Font Awesome ${versionNumber} ${fontType}"`;
 
-            ctx.fillText(icon, 128, 128);
+            ctx.fillText(icon, 36, 29);
 
             //ctx.font = '30px Arial Black';
             //ctx.fillText("Hello World!", 128, 200);
         }
 
-        function generate() {
+		function generate_slider() {
+			const hue = document.getElementById("hue_slider").value;
+			generate(hue);
+		}
+
+		function generate_number() {
+			const hue = document.getElementById("hue_number").value;
+
+			generate(hue);
+		}
+
+        function generate(hue) {
+            document.getElementById("hue_slider").title = hue;
+			document.getElementById("hue_slider").value = hue;
+			document.getElementById("hue_number").value = hue;
+
             const symbol = document.getElementById("symbol").innerText;
-            const hue = document.getElementById("hue").value;
-            document.getElementById("hue").title = hue;
             const isBrand = document.getElementById("brand").value;
             const iconStyle = document.getElementById("styleSelect").value;
             doThings(String.fromCodePoint(parseInt(symbol, 16)), hue, isBrand, iconStyle);
@@ -305,7 +323,7 @@
             const pattern = /\d+\.\d+\.\d+/;
             const link = document.querySelector('link[rel="stylesheet"]');
 
-            const failText = 'Something went wrong. Please have a look at <a href="https://github.com/sebinside/StreamAwesome">StreamAwesome repo</a> for instructions.';
+            const failText = 'Something went wrong. Please have a look at <a href="https://github.com/johannesbuehl/CompanionAwesome">CompanionAwesome repo</a> for instructions.';
             if (link) {
                 await fetch(link.href)
                     .then(response => response.text())
@@ -386,7 +404,7 @@
         document.fonts.ready.then(() => {
             start();
         });
-        document.fonts.onloadingdone = generate;
+        document.fonts.onloadingdone = generate_slider;
         const colorWay = new ColorWay();
 
     </script>
