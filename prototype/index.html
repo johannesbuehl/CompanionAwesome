@@ -21,7 +21,7 @@
 
     <div id="mainPage">
         <section id="content">
-            <canvas id="main" width=72 height=58>
+            <canvas id="main" width=72 height=72>
             </canvas>
         </section>
 
@@ -89,7 +89,7 @@
     </div>
 
     <script>
-        let exactVersionNumber = '6.4.0';
+        let exactVersionNumber = '6.5.1';
         let versionNumber = '6';
         let versionType = 'Free';
 
@@ -273,7 +273,7 @@
             const realFontSize = Math.min(fontSize, fontSize * ((fontSize + 5) / textMetrics.width));
             ctx.font = `${fontWeight} ${realFontSize}px "Font Awesome ${versionNumber} ${fontType}"`;
 
-            ctx.fillText(icon, 36, 29);
+            ctx.fillText(icon, canvas.height / 2, canvas.width / 2);
 
             //ctx.font = '30px Arial Black';
             //ctx.fillText("Hello World!", 128, 200);

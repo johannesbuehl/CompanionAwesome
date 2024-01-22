@@ -74,16 +74,16 @@ select {
 
 #content {
 	margin-inline: auto;
-    height: 206px;
+    height: 256px;
     width: 256px;
     display: block;
     overflow: hidden;
-    min-height: 206px;
+    min-height: 256px;
     min-width: 256px;
 }
 
 #main {
-    height: 206px;
+    height: 256px;
     width: 256px;
 }
 
